@@ -10,42 +10,42 @@ def find_largest_subvector_naive(array):
     max_value = 0
     
     for i in range(0, len(array)):
-        for j in range(i+1, len(array)):
-            subvector_sum = sum(array[i:j])
+        for j in range(i, len(array)):
+            subvector_sum = sum(array[i:j+1])
             if subvector_sum > max_value:
-                subvector = array[i:j]
+                subvector = array[i:j+1]
                 max_value = subvector_sum
 
     return (subvector, max_value)
 
 def find_largest_subvector_quadratic(array):
-    """ Find the subvector with the highest sum via naive cubic algorithm"""
+    """Build up the sums as you calculate each subvector to reduce the time to quadratic."""
     max_value = 0
     
     for i in range(0, len(array)):
-        
-        subvector_sum = array[i]
-        for j in range(i+1, len(array)):
-            if subvector_sum > max_value:
-                subvector = array[i:j]
-                max_value = subvector_sum
+        subvector_sum = 0
+        for j in range(i, len(array)):
             subvector_sum += array[j]
-
+            if subvector_sum > max_value:
+                subvector = array[i:j+1]
+                max_value = subvector_sum
     return (subvector, max_value)
 
 def find_largest_subvector_divide(array):
+    """Use a divide and conquer algorithm."""
     if len(array) == 0:
         return 0
     if len(array) == 1:
         return max(0, array[0])
 
     middle = int(len(array) / 2)
-
+    #print('middle: %d' % middle)
     lsum = 0
     lmax = 0
-    for ele in array[:middle]:
+    for ele in reversed(array[:middle]):
         lsum += ele
         lmax = max(lmax, lsum)
+
     rsum = 0
     rmax = 0
     for ele in array[middle:]:
